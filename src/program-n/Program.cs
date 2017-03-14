@@ -14,15 +14,12 @@ namespace program_n
             {
                 File.Delete("a.asn");
             }
-            LifeCycle cycle = new LifeCycle();
-            TranslateType type = new TranslateType(cycle);
+            LocalVariable cycle = new LocalVariable();
             TranslateAssignment assign = new TranslateAssignment(cycle);
-            type.AllocVar("age", sizeof(int));
-            type.AllocVar("grade", sizeof(double));
-            type.AllocVar("sex", sizeof(byte));
-            assign.AssignmentVar("age", 20);
-            assign.AssignmentVar("grade", 12.4);
+            cycle.MemoryAlloc("sex", sizeof(byte));
             assign.AssignmentVar("sex", 'a');
+            cycle.MemoryAlloc("sex2", sizeof(byte));
+            assign.VarAsignVar("sex2", "sex");
         }
     }
 }

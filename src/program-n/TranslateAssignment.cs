@@ -10,14 +10,14 @@ namespace program_n
     /// </summary>
     public class TranslateAssignment
     {
-        private LifeCycle LifeCycle;
-        public TranslateAssignment(LifeCycle LifeCycle)
+        private LocalVariable LifeCycle;
+        public TranslateAssignment(LocalVariable LifeCycle)
         {
             this.LifeCycle = LifeCycle;
         }
         public void AssignmentVar(string varName, dynamic Value)
         {
-            Int32 Offset = LifeCycle.GetOffset(varName);           
+            LocalVariable.VarInfo varInfo = LifeCycle.GetVarInfo(varName);  
             byte[] bytes = BitConverter.GetBytes(Value);
             List<byte> tmpByteList = bytes.ToList();
             for (int i = 0; i < 4 - bytes.Length % 4; i++)
@@ -31,11 +31,29 @@ namespace program_n
                 _Values.Add(BitConverter.ToInt32(bytes, i * 4));
             }
             string OutputStr = $";set variable value" + Environment.NewLine;
-            for (int i = 0; i < _Values.Count; i++)
+            for (int i = 0; i < varInfo.Size; i++)
             {
-                OutputStr += $"mov r0,{Offset - i}" + Environment.NewLine
+                OutputStr += $"mov r0,{varInfo.Offset - i}" + Environment.NewLine
                     + $"sub r0,sp,r0" + Environment.NewLine
                     + $"mov r1,{_Values[i]}" + Environment.NewLine
+                    + $"str r1,r0" + Environment.NewLine;
+            }
+            OutputObject.Out(OutputStr);
+        }
+
+        public void VarAsignVar(string destName, string srcName)
+        {
+            LocalVariable.VarInfo destVarInfo = LifeCycle.GetVarInfo(destName);
+            LocalVariable.VarInfo srcVarInfo = LifeCycle.GetVarInfo(srcName);
+
+            string OutputStr = $";set variable value" + Environment.NewLine;
+            for (int i = 0; i < destVarInfo.Size; i++)
+            {
+                OutputStr += $"mov r0,{srcVarInfo.Offset - i}" + Environment.NewLine
+                    + $"sub r0,sp,r0" + Environment.NewLine
+                    + $"ldr r1,r0" + Environment.NewLine
+                    + $"mov r0,{destVarInfo.Offset - i}" + Environment.NewLine
+                    + $"sub r0,sp,r0" + Environment.NewLine
                     + $"str r1,r0" + Environment.NewLine;
             }
             OutputObject.Out(OutputStr);

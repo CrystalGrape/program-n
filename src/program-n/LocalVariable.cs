@@ -8,9 +8,14 @@ namespace program_n
     /// <summary>
     /// 生存周期(局部变量)
     /// </summary>
-    public class LifeCycle
+    public class LocalVariable
     {
-        private Dictionary<string, Int32> SymbolMap = new Dictionary<string, int>();
+        public class VarInfo
+        {
+            public Int32 Offset { get; set; }
+            public Int32 Size { get; set; }
+        }
+        private Dictionary<string, VarInfo> SymbolMap = new Dictionary<string, VarInfo>();
         /// <summary>
         /// 声明一个局部变量
         /// </summary>
@@ -25,11 +30,11 @@ namespace program_n
                 OutputStr += "mov r0,0" + Environment.NewLine
                     + $"push r0" + Environment.NewLine;
             }
-            SymbolMap.Add(varName, 0);
+            SymbolMap.Add(varName, new VarInfo { Offset = 0, Size = MemorySize });
             string[] keyArray = SymbolMap.Keys.ToArray();
             for (int i = 0; i < keyArray.Length; i++)
             {
-                SymbolMap[keyArray[i]] += MemorySize;
+                SymbolMap[keyArray[i]].Offset += MemorySize;
             }
             OutputObject.Out(OutputStr);
 
@@ -41,7 +46,7 @@ namespace program_n
         /// </summary>
         /// <param name="varName"></param>
         /// <returns></returns>
-        public Int32 GetOffset(string varName)
+        public VarInfo GetVarInfo(string varName)
         {
             if(!SymbolMap.ContainsKey(varName))
             {
