@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace program_n
 {
+    /// <summary>
+    /// 输出目标文件
+    /// </summary>
     public class OutputObject
     {
         private static String _objectFile;
@@ -21,7 +24,13 @@ namespace program_n
                 _objectFile = value;
             }
         }
-        public static void Out(string asnStr)
+        private string asnStr = "";
+        public void Asn(string AsnCode)
+        {
+            asnStr += AsnCode + Environment.NewLine;
+        }
+
+        public void Out()
         {
             FileStream fs = new FileStream(objectFile, FileMode.Append);
             byte[] arr = Encoding.ASCII.GetBytes(asnStr);

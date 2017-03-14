@@ -14,16 +14,10 @@ namespace program_n
             {
                 File.Delete("a.asn");
             }
-            LifeCycle LifeCycle = new LifeCycle();
-            TranslateType type = new TranslateType(LifeCycle);
-            TranslateAssignment assign = new TranslateAssignment(LifeCycle);
-            type.TranslateInt("age");
-            type.TranslateFloat("grade");
-
-            assign.AssignmentVar("age", 10);
-            assign.AssignmentVar("grade", 10.6);
-            CommonStack.Instance.Push(LifeCycle);
-            CommonStack.Instance.Pop(LifeCycle);
+            Function func = new Function("main");
+            func.AddParameter("argc", 4);
+            func.AddParameter("args", 8);
+            func.FuncPrepare();
         }
     }
 }
