@@ -8,13 +8,18 @@ namespace program_n
     /// <summary>
     /// 变量赋值编译过程
     /// </summary>
-    public class TranslateAssignment
+    public class Assignment
     {
         private LocalVariable LifeCycle;
-        public TranslateAssignment(LocalVariable LifeCycle)
+        public Assignment(LocalVariable LifeCycle)
         {
             this.LifeCycle = LifeCycle;
         }
+        /// <summary>
+        /// 变量赋值
+        /// </summary>
+        /// <param name="varName"></param>
+        /// <param name="Value"></param>
         public void AssignmentVar(string varName, dynamic Value)
         {
             LocalVariable.VarInfo varInfo = LifeCycle.GetVarInfo(varName);  
@@ -41,6 +46,11 @@ namespace program_n
             OutputObject.Out(OutputStr);
         }
 
+        /// <summary>
+        /// 变量对变量赋值
+        /// </summary>
+        /// <param name="destName"></param>
+        /// <param name="srcName"></param>
         public void VarAsignVar(string destName, string srcName)
         {
             LocalVariable.VarInfo destVarInfo = LifeCycle.GetVarInfo(destName);

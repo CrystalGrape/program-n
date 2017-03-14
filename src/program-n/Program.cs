@@ -15,11 +15,11 @@ namespace program_n
                 File.Delete("a.asn");
             }
             LocalVariable cycle = new LocalVariable();
-            TranslateAssignment assign = new TranslateAssignment(cycle);
-            cycle.MemoryAlloc("sex", sizeof(byte));
-            assign.AssignmentVar("sex", 'a');
-            cycle.MemoryAlloc("sex2", sizeof(byte));
-            assign.VarAsignVar("sex2", "sex");
+            Assignment assign = new Assignment(cycle);
+            cycle.MemoryAlloc("a", 1);
+            cycle.MemoryAlloc("b", 4);
+            cycle.MemoryAlloc("c", 8);
+            cycle.MemoryFree();
         }
     }
 }

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace program_n
 {
+    /// <summary>
+    /// 输出目标文件
+    /// </summary>
     public class OutputObject
     {
         private static String _objectFile;

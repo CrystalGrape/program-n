@@ -16,6 +16,7 @@ namespace program_n
             public Int32 Size { get; set; }
         }
         private Dictionary<string, VarInfo> SymbolMap = new Dictionary<string, VarInfo>();
+
         /// <summary>
         /// 声明一个局部变量
         /// </summary>
@@ -30,6 +31,8 @@ namespace program_n
                 OutputStr += "mov r0,0" + Environment.NewLine
                     + $"push r0" + Environment.NewLine;
             }
+            if (SymbolMap.ContainsKey(varName))
+                throw new Exception($"该作用域内变量重复定义:{varName}");
             SymbolMap.Add(varName, new VarInfo { Offset = 0, Size = MemorySize });
             string[] keyArray = SymbolMap.Keys.ToArray();
             for (int i = 0; i < keyArray.Length; i++)
@@ -53,6 +56,26 @@ namespace program_n
                 throw new Exception($"变量{varName}未声明");
             }
             return SymbolMap[varName];
+        }
+
+        /// <summary>
+        /// 释放局部变量
+        /// </summary>
+        public void MemoryFree()
+        {
+            Int32 StackSize = 0;
+            string[] keyArray = SymbolMap.Keys.ToArray();
+            for (int i = 0; i < keyArray.Length; i++)
+            {
+                StackSize += SymbolMap[keyArray[i]].Size;
+            }
+
+            string OutputStr = ";free all local variable" + Environment.NewLine;
+            for (int i = 0; i < StackSize; i++)
+            {
+                OutputStr += "pop r0" + Environment.NewLine;
+            }
+            OutputObject.Out(OutputStr);
         }
     }
 }
