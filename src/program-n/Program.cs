@@ -14,12 +14,10 @@ namespace program_n
             {
                 File.Delete("a.asn");
             }
-            LocalVariable cycle = new LocalVariable();
-            TranslateAssignment assign = new TranslateAssignment(cycle);
-            cycle.MemoryAlloc("sex", sizeof(byte));
-            assign.AssignmentVar("sex", 'a');
-            cycle.MemoryAlloc("sex2", sizeof(byte));
-            assign.VarAsignVar("sex2", "sex");
+            Function func = new Function("main");
+            func.AddParameter("argc", 4);
+            func.AddParameter("args", 1);
+            func.FuncPrepare();
         }
     }
 }
