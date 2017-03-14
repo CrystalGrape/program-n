@@ -54,15 +54,19 @@ namespace program_n
             asnFile.Asn($";declare function {FunctionName}");
             asnFile.Asn($"section {FunctionName}:");
             asnFile.Out();
-            //按次序实例化变量 
+            //按次序实例化参数
             Parameters.ForEach(x =>
             {
                 LocalEnvironment.DeclareParam(x.ParamName, x.Size);
             });
-            LocalEnvironment.MemoryAlloc("asa", 12);
-            assignTool.AssignmentVar("asa", 212);
-            LocalEnvironment.MemoryAlloc("bbb", 12);
-            assignTool.VarAsignVar("bbb", "asa");
+            //LocalEnvironment.MemoryAlloc("asa", 12);
+            //assignTool.AssignmentVar("asa", 212);
+            //LocalEnvironment.MemoryAlloc("bbb", 12);
+            //assignTool.VarAsignVar("bbb", "asa");
+            //List<string> Params = new List<string>();
+            //Params.Add("asa");
+            //Params.Add("bbb");
+            //LocalEnvironment.PrepareParam(Params);
         }
     }
 }

@@ -52,15 +52,25 @@ namespace program_n
         /// </summary>
         /// <param name="varName"></param>
         /// <param name="Size"></param>
-        public void PrepareParam(string varName, Int32 Size)
+        public void PrepareParam(List<string> Params)
         {
-            Int32 MemorySize = Size / 4 + Size % 4;
             OutputObject asnFile = new OutputObject();
             asnFile.Asn($";prepare parameter variabl");
-            for (int i = 0; i < MemorySize; i++)
+            asnFile.Asn($"mov dptr,sp");
+            Params.ForEach(x =>
             {
-                asnFile.Asn($"mov r0,{i}");
-            }
+                VarInfo varInfo = GetVarInfo(x);
+
+                for (int i = 0; i < varInfo.Size; i++)
+                {
+                    asnFile.Asn($"mov r0,{varInfo.Offset - i}");
+                    asnFile.Asn($"sub r0,sp,r0");
+                    asnFile.Asn($"ldr r1,r0");
+                    asnFile.Asn($"str r1,dptr");
+                    asnFile.Asn($"mov r0,1");
+                    asnFile.Asn($"add dptr,dptr,r0");
+                }
+            });
             asnFile.Out();
         }
 
