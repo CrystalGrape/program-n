@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace program_n
 {
+    //类型声明编译过程
     public class TranslateType
     {
         private LifeCycle LifeCycle;
@@ -14,27 +15,9 @@ namespace program_n
         {
             this.LifeCycle = LifeCycle;
         }
-        public void TranslateInt(string varName)
+        public void AllocVar(string varName, int Size)
         {
-            Int32 Addr = LifeCycle.MemoryAlloc(4);
-            LifeCycle.Set(varName, Addr);
-        }
-
-        public void TranslateChar(string varName)
-        {
-            Int32 Addr = LifeCycle.MemoryAlloc(1);
-            LifeCycle.Set(varName, Addr);
-        }
-        public void TranslateFloat(string varName)
-        {
-            Int32 Addr = LifeCycle.MemoryAlloc(4);
-            LifeCycle.Set(varName, Addr);
-        }
-
-        public void TranslateDouble(string varName)
-        {
-            Int32 Addr = LifeCycle.MemoryAlloc(8);
-            LifeCycle.Set(varName, Addr);
+            Int32 Addr = LifeCycle.MemoryAlloc(varName, Size);
         }
     }
 }
