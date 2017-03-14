@@ -84,12 +84,9 @@ namespace program_n
         {
             Int32 MemorySize = Size / 4 + Size % 4;
             OutputObject asnFile = new OutputObject();
-            asnFile.Asn($";declare parameter variable");
-            for (Int32 Index = 0; Index < MemorySize; Index++)
-            {
-                asnFile.Asn($"mov r0,{MemorySize}");
-                asnFile.Asn($"add sp,sp,r0");
-            }
+            asnFile.Asn($";declare parameter variable");     
+            asnFile.Asn($"mov r0,{MemorySize}");
+            asnFile.Asn($"add sp,sp,r0");
             SymbolMap.Add(varName, new VarInfo { Offset = 0, Size = MemorySize });
             string[] keyArray = SymbolMap.Keys.ToArray();
             for (int i = 0; i < keyArray.Length; i++)

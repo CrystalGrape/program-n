@@ -59,14 +59,6 @@ namespace program_n
             {
                 LocalEnvironment.DeclareParam(x.ParamName, x.Size);
             });
-            //LocalEnvironment.MemoryAlloc("asa", 12);
-            //assignTool.AssignmentVar("asa", 212);
-            //LocalEnvironment.MemoryAlloc("bbb", 12);
-            //assignTool.VarAsignVar("bbb", "asa");
-            //List<string> Params = new List<string>();
-            //Params.Add("asa");
-            //Params.Add("bbb");
-            //LocalEnvironment.PrepareParam(Params);
         }
     }
 }
