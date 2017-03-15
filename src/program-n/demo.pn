@@ -1,17 +1,23 @@
 ﻿import system.io
 import user.test
 
-func main()->void
+@main() :void
 {
 	int a = 10;
 	int b;
-	let b = 20;
+	b = 20;
 	int result;
-	@add(a, b)->result;
+	$add(a, b) :result;
+	$print(result);
 }
 
-func add(int a, int b)->int
+@add(int a, int b) :int
 {
 	int c = a + b;
 	return c;
+}
+
+@print(int a) :void
+{
+	echo(a);
 }
