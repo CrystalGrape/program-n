@@ -1,17 +1,17 @@
 ﻿import system.io
 import user.test
 
-func main()->var void
+func main()->void
 {
-	var int a = 10;
-	var int b;
+	int a = 10;
+	int b;
 	let b = 20;
-	var int result;
+	int result;
 	@add(a, b)->result;
 }
 
-func add(var int a, var int b)->var int
+func add(int a, int b)->int
 {
-	var int c = a + b;
+	int c = a + b;
 	return c;
 }
