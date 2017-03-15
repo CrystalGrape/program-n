@@ -17,7 +17,7 @@ import user.test
 	return c;
 }
 
-@print(int a) :void
+@print(int a)
 {
-	echo(a);
+	$echo(a);
 }

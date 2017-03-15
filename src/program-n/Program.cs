@@ -39,13 +39,12 @@ namespace program_n
             FileStream fs = new FileStream("demo.pn", FileMode.Open);
             StreamReader sr = new StreamReader(fs);
             List<string> block = new List<string>();            //代码块
-            //Function inputFunc;
             while(!sr.EndOfStream)
             {
                 string line = sr.ReadLine();
                 line = line.TrimStart('\t', ' ', '\r', '\n');
                 line = line.TrimEnd('\t', ' ', '\r', '\n');
-
+                Console.WriteLine(line);
             }
             
 
