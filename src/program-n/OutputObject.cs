@@ -37,6 +37,7 @@ namespace program_n
             fs.Write(arr, 0, arr.Length);
             fs.Flush();
             fs.Dispose();
+            asnStr = "";
         }
     }
 }

@@ -8,16 +8,21 @@ namespace program_n
 {
     public class Program
     {
+        private static int DataStackBaseAddr = 300;
         public static void Main(string[] args)
         {
             if(File.Exists("a.asn"))
             {
                 File.Delete("a.asn");
             }
-            Function func = new Function("main");
-            func.AddParameter("argc", 4);
-            func.AddParameter("args", 8);
+            OutputObject asnFile = new OutputObject();
+            asnFile.Asn($"mov dptr,{DataStackBaseAddr}");
+            asnFile.Asn($"jmp main");
+            asnFile.Out();
+
+            Function func = new Function("test");
             func.FuncPrepare();
+            func.FuncReturn("data");
         }
     }
 }

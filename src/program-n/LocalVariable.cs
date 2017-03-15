@@ -31,7 +31,9 @@ namespace program_n
             for (Int32 Index = 0; Index < MemorySize; Index++)
             {
                 asnFile.Asn($"mov r0,0");
-                asnFile.Asn($"push r0");
+                asnFile.Asn($"str r0,dptr");
+                asnFile.Asn($"mov r0,1");
+                asnFile.Asn($"add dptr,dptr,r0");
             }
             if (SymbolMap.ContainsKey(varName))
                 throw new Exception($"该作用域内变量重复定义:{varName}");
@@ -55,8 +57,8 @@ namespace program_n
         public void PrepareParam(List<string> Params)
         {
             OutputObject asnFile = new OutputObject();
-            asnFile.Asn($";prepare parameter variabl");
-            asnFile.Asn($"mov dptr,sp");
+            asnFile.Asn($";prepare parameter variable");
+            asnFile.Asn($"mov r2,dptr");
             Params.ForEach(x =>
             {
                 VarInfo varInfo = GetVarInfo(x);
@@ -64,11 +66,11 @@ namespace program_n
                 for (int i = 0; i < varInfo.Size; i++)
                 {
                     asnFile.Asn($"mov r0,{varInfo.Offset - i}");
-                    asnFile.Asn($"sub r0,sp,r0");
+                    asnFile.Asn($"sub r0,dptr,r0");
                     asnFile.Asn($"ldr r1,r0");
-                    asnFile.Asn($"str r1,dptr");
+                    asnFile.Asn($"str r1,r2");
                     asnFile.Asn($"mov r0,1");
-                    asnFile.Asn($"add dptr,dptr,r0");
+                    asnFile.Asn($"add r2,r2,r0");
                 }
             });
             asnFile.Out();
@@ -86,7 +88,7 @@ namespace program_n
             OutputObject asnFile = new OutputObject();
             asnFile.Asn($";declare parameter variable");     
             asnFile.Asn($"mov r0,{MemorySize}");
-            asnFile.Asn($"add sp,sp,r0");
+            asnFile.Asn($"add dptr,dptr,r0");
             SymbolMap.Add(varName, new VarInfo { Offset = 0, Size = MemorySize });
             string[] keyArray = SymbolMap.Keys.ToArray();
             for (int i = 0; i < keyArray.Length; i++)
@@ -126,10 +128,8 @@ namespace program_n
 
             OutputObject asnFile = new OutputObject();
             asnFile.Asn($";free all local variable");
-            for (int i = 0; i < StackSize; i++)
-            {
-                asnFile.Asn($"pop r0");
-            }
+            asnFile.Asn($"mov r0,{StackSize}");
+            asnFile.Asn($"sub dptr,dptr,r0");
             asnFile.Out();
         }
     }

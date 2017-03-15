@@ -1,10 +1,12 @@
-;declare function main
-section main:
-;declare parameter variable
-mov r0,1
-add sp,sp,r0
-;declare parameter variable
-mov r0,2
-add sp,sp,r0
-mov r0,2
-add sp,sp,r0
+mov dptr,300
+jmp main
+;declare function test
+section test:
+push lr
+push cpsr
+;free all local variable
+mov r0,0
+sub dptr,dptr,r0
+pop cpsr
+pop lr
+ret
