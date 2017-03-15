@@ -7,29 +7,90 @@ using System.Threading.Tasks;
 
 namespace program_n
 {
+    public class FuncParser
+    {
+        public string funcName = "";
+        public int returnType { get; set; }
+        public List<Function.Parameter> Args = new List<Function.Parameter>();
+        public int GetType(string type)
+        {
+            switch (type)
+            {
+                case "void":
+                    return 0;
+                case "int":
+                    return 4;
+                case "char":
+                    return 1;
+                case "double":
+                    return 8;
+                default:
+                    throw new Exception($"未知类型:{type}");
+            }
+        }
+        public void Parse(string line)
+        {
+            List<char> Declare = line.ToList();
+            int flag = 0;
+            string ArgsDeclare = "";
+            string ReturnType = "";
+            Declare.ForEach(p => {
+                switch (flag)
+                {
+                    case 0:
+                        //函数名状态
+                        if (p == '(')
+                        {
+                            flag = 1;
+                            break;
+                        }
+                        funcName += p;
+                        break;
+                    case 1:
+                        if (p == ')')
+                        {
+                            flag = 2;
+                            break;
+                        }
+                        ArgsDeclare += p;
+                        break;
+                    case '2':
+                        if(p=='-')
+                        {
+                            flag = 3;
+                            break;
+                        }
+                        break;
+                    case '3':
+                        if (p == '>')
+                        {
+                            flag = 4;
+                            break;
+                        }
+                        break;
+                    case '4':
+                        ReturnType += p;
+                        break;
+                }
+            });
+            returnType = GetType(ReturnType);
+
+            List<string> _Args = ArgsDeclare.Split(',').ToList();
+            _Args.ForEach(x =>
+            {
+                x = x.Trim();
+                string[] arg = x.Split(' ');
+                Function.Parameter param= new Function.Parameter();
+                param.ParamName = arg[1];
+                param.Size = GetType(arg[0]);
+                Args.Add(param);
+            });
+        }
+    }
     public class Program
     {
         private static int DataStackBaseAddr = 300;
         
-        //流程控制列表
-        private static string[] keyword_process = { "if", "else", "for", "while" };
-        //类型关键字列表
-        private static string[] keyword_type = { "int", "double", "char", "var", "int*", "double*", "char*", "var*" };
-        //其它关键字
-        private static string[] keyword_other = { "return", "{", "}" };
-        //关键字列表
-        private static List<string> keyword
-        {
-            get
-            {
-                List<string> set = new List<string>();
-                set.AddRange(keyword_process);
-                set.AddRange(keyword_type);
-                set.AddRange(keyword_other);
-                return set;
-            }
-        }
-
         public static void Main(string[] args)
         {
             if(File.Exists("a.asn"))
@@ -39,12 +100,20 @@ namespace program_n
             FileStream fs = new FileStream("demo.pn", FileMode.Open);
             StreamReader sr = new StreamReader(fs);
             List<string> block = new List<string>();            //代码块
+
             while(!sr.EndOfStream)
             {
                 string line = sr.ReadLine();
                 line = line.TrimStart('\t', ' ', '\r', '\n');
                 line = line.TrimEnd('\t', ' ', '\r', '\n');
-                Console.WriteLine(line);
+                if(line.StartsWith("@"))
+                {
+                    line = line.Substring(1);
+                    //函数开始
+                    FuncParser parser = new FuncParser();
+                    parser.Parse(line);
+                    Console.WriteLine(line);
+                }            
             }
             
 
