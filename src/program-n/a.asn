@@ -1,0 +1,19 @@
+;declare function main
+section main:
+;declare function add
+section add:
+push lr
+push cpsr
+;declare parameter variable
+mov r0,1
+add dptr,dptr,r0
+;declare parameter variable
+mov r0,1
+add dptr,dptr,r0
+;declare function print
+section print:
+push lr
+push cpsr
+;declare parameter variable
+mov r0,1
+add dptr,dptr,r0
