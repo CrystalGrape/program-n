@@ -1,0 +1,23 @@
+﻿import system.io
+import user.test
+
+@main()->void
+{
+	int a = 10;
+	int b;
+	b = 20;
+	int result;
+	$add(a, b)->result;
+	$print(result);
+}
+
+@add(int a, int b)->int
+{
+	int c = a + b;
+	return c;
+}
+
+@print(int a)->void
+{
+	$echo(a);
+}

@@ -53,20 +53,41 @@ namespace program_n
             OutputObject asnFile = new OutputObject();
             asnFile.Asn($";declare function {FunctionName}");
             asnFile.Asn($"section {FunctionName}:");
+            if (!FunctionName.Equals("main"))
+            {
+                //如果不是主函数，必须保存现场
+                asnFile.Asn($"push lr");
+                asnFile.Asn($"push cpsr");
+            }
             asnFile.Out();
             //按次序实例化参数
             Parameters.ForEach(x =>
             {
                 LocalEnvironment.DeclareParam(x.ParamName, x.Size);
             });
-            //LocalEnvironment.MemoryAlloc("asa", 12);
-            //assignTool.AssignmentVar("asa", 212);
-            //LocalEnvironment.MemoryAlloc("bbb", 12);
-            //assignTool.VarAsignVar("bbb", "asa");
-            //List<string> Params = new List<string>();
-            //Params.Add("asa");
-            //Params.Add("bbb");
-            //LocalEnvironment.PrepareParam(Params);
+        }
+
+        public void FuncReturn(string varName)
+        {
+            OutputObject asnFile = new OutputObject();
+            
+            //释放数据栈
+            LocalEnvironment.MemoryFree();
+            if (FunctionName.Equals("main"))
+            {
+                asnFile.Asn($"end");
+            }
+            else
+            {
+                List<string> ReturnParam = new List<string>();
+                ReturnParam.Add(ReturnVariable.ParamName);
+                LocalEnvironment.PrepareParam(ReturnParam);
+                //恢复现场
+                asnFile.Asn($"pop cpsr");
+                asnFile.Asn($"pop lr");
+                asnFile.Asn($"ret");
+            }
+            asnFile.Out();
         }
     }
 }

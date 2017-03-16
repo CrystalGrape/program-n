@@ -41,7 +41,7 @@ namespace program_n
             for (int i = 0; i < (varInfo.Size > _Values.Count ? _Values.Count : varInfo.Size); i++)
             {
                 asnFile.Asn($"mov r0,{varInfo.Offset - i}");
-                asnFile.Asn($"sub r0,sp,r0");
+                asnFile.Asn($"sub r0,dptr,r0");
                 asnFile.Asn($"mov r1,{_Values[i]}");
                 asnFile.Asn($"str r1,r0");
             }
@@ -63,13 +63,34 @@ namespace program_n
             for (int i = 0; i < destVarInfo.Size; i++)
             {
                 asnFile.Asn($"mov r0,{srcVarInfo.Offset - i}");
-                asnFile.Asn($"sub r0,sp,r0");
+                asnFile.Asn($"sub r0,dptr,r0");
                 asnFile.Asn($"ldr r1,r0");
                 asnFile.Asn($"mov r0,{destVarInfo.Offset - i}");
-                asnFile.Asn($"sub r0,sp,r0");
+                asnFile.Asn($"sub r0,dptr,r0");
                 asnFile.Asn($"str r1,r0");
             }
             asnFile.Out();
+        }
+
+        /// <summary>
+        /// 将函数返回值存储到变量varName中
+        /// </summary>
+        /// <param name="varName"></param>
+        public void ReturnAsignVar(string varName)
+        {
+            LocalVariable.VarInfo varInfo = LifeCycle.GetVarInfo(varName);
+            OutputObject asnFile = new OutputObject();
+            asnFile.Asn($";set return variable value");
+
+            for (int i = 0; i < varInfo.Size; i++)
+            {
+                asnFile.Asn($"mov r0,{varInfo.Offset - i}");
+                asnFile.Asn($"sub r0,dptr,r0");
+                asnFile.Asn($"ldr r1,r0");
+                asnFile.Asn($"mov r0,{i}");
+                asnFile.Asn($"add r0,dptr,r0");
+                asnFile.Asn($"str r1,r0");
+            }
         }
     }
 }
