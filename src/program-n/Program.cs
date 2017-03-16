@@ -54,21 +54,21 @@ namespace program_n
                         }
                         ArgsDeclare += p;
                         break;
-                    case '2':
+                    case 2:
                         if(p=='-')
                         {
                             flag = 3;
                             break;
                         }
                         break;
-                    case '3':
+                    case 3:
                         if (p == '>')
                         {
                             flag = 4;
                             break;
                         }
                         break;
-                    case '4':
+                    case 4:
                         ReturnType += p;
                         break;
                 }
@@ -79,6 +79,8 @@ namespace program_n
             _Args.ForEach(x =>
             {
                 x = x.Trim();
+                if (string.IsNullOrEmpty(x))
+                    return;
                 string[] arg = x.Split(' ');
                 Function.Parameter param= new Function.Parameter();
                 param.ParamName = arg[1];
@@ -99,21 +101,35 @@ namespace program_n
             }
             FileStream fs = new FileStream("demo.pn", FileMode.Open);
             StreamReader sr = new StreamReader(fs);
-            List<string> block = new List<string>();            //代码块
 
+            Function func = null;
+            int block_deep = 0;
             while(!sr.EndOfStream)
             {
                 string line = sr.ReadLine();
                 line = line.TrimStart('\t', ' ', '\r', '\n');
                 line = line.TrimEnd('\t', ' ', '\r', '\n');
-                if(line.StartsWith("@"))
+                if (line.StartsWith("@"))
                 {
                     line = line.Substring(1);
                     //函数开始
                     FuncParser parser = new FuncParser();
                     parser.Parse(line);
-                    Console.WriteLine(line);
-                }            
+                    func = new Function(parser.funcName);
+                    func.SetReturn(parser.returnType);
+                    parser.Args.ForEach(p =>
+                    {
+                        func.AddParameter(p.ParamName, p.Size);
+                    });
+                    func.FuncPrepare();
+                }
+                if (line.StartsWith("{"))
+                    block_deep++;
+                if(line.StartsWith("return"))
+                {
+                }
+                if (line.StartsWith("}"))
+                    block_deep--;
             }
             
 

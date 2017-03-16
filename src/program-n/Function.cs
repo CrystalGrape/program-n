@@ -37,9 +37,9 @@ namespace program_n
         {
             Parameters.Add(new Parameter { ParamName = ParamName, Size = Size });
         }
-        public void SetReturn(string ParamName, int Size)
+        public void SetReturn(int Size)
         {
-            ReturnVariable = new Parameter { ParamName = ParamName, Size = Size };
+            ReturnVariable = new Parameter { ParamName = "__return_parameter", Size = Size };
         }
         /// <summary>
         /// 函数准备编译
